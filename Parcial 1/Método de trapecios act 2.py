@@ -1,0 +1,62 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import sympy
+
+x = sympy.symbols('x')
+expr = (1/(sympy.sqrt(2*sympy.pi)))*(sympy.exp((-x**2)/2))
+
+f = sympy.lambdify(x, expr, 'numpy')
+
+a = float(input('Limite inferior (a): '))
+b = float(input('Limite superior (b): '))
+
+while True:
+    while True:
+        n = int(input('Valor de n: '))
+        if n%2==0:
+            break
+    
+    valor_analitico = float(sympy.integrate(expr, (x, a, b)))
+
+    x_trap = np.linspace(a, b, n + 1)
+    y_trap = f(x_trap)
+    h = (b - a) / n
+
+    valor_numerico = 0
+
+    for i in range(n):
+        area_trapecio = (y_trap[i] + y_trap[i+1]) * h / 2
+        valor_numerico += area_trapecio
+    
+    print('\nINTEGRACION POR TRAPECIOS:')
+    print('---------------------------------------------------')
+    print('Resultado analitico: ', valor_analitico)
+    print('Resultado numerico: ', valor_numerico)
+
+    # Grafica
+    x_rango = np.linspace(a - 1, b + 1, 100) 
+    plt.figure(figsize=(10, 5))
+
+    plt.plot(x_rango, f(x_rango), label='f(x)', color='cornflowerblue')
+
+    plt.fill_between(x_trap, y_trap, color='thistle', alpha=0.4, label='Trapecios')
+
+    for i in range(len(x_trap)):
+        plt.vlines(x_trap[i], 0, y_trap[i], color='orchid', linestyle='--')
+
+    plt.axvline(a, color='darkmagenta', linestyle='-', label=f'a={a}')
+    plt.axvline(b, color='darkmagenta', linestyle='-', label=f'b={b}')
+
+    plt.title('Método de Trapecios - Evidencia 2')
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.legend()
+    plt.grid(axis='y', alpha=0.3)
+    plt.show()
+    
+    op = int(input('\nQuiere modificar el valor de n? [1-Si/2-No] '))
+    if op==2:
+        break
+    
+print('Fin del programa --------')
+
