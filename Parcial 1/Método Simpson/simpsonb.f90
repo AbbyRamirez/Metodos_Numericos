@@ -45,7 +45,7 @@ do i = 1, n-1
     end if
 end do
 
-! Escribir último punto
+! Escribir Ãºltimo punto
 write(10,*) b, f(b)
 
 integral = suma*h/3.0
